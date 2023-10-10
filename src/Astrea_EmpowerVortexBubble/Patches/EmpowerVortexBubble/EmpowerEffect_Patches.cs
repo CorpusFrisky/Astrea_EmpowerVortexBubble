@@ -60,9 +60,9 @@ namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
                 }
                 else
                 {
-                    //Debug.Log("***CFLOG*** [EmpowerEffect_EffectDecreased] Decreasing key " + key + " with amount : " + effectAmount);
+                    Debug.Log("***CFLOG*** [EmpowerEffect_EffectDecreased] Decreasing key " + key + " with amount : " + effectAmount);
                     ownerInstanceIdToEmpowerAmountDict[key] -= effectAmount;
-                    //Debug.Log("***CFLOG*** [EmpowerEffect_EffectDecreased] New amount for key " + key + ": " + ownerNameToEmpowerAmountDict[key]);
+                    Debug.Log("***CFLOG*** [EmpowerEffect_EffectDecreased] New amount for key " + key + ": " + ownerInstanceIdToEmpowerAmountDict[key]);
                 }
 
                 // Avoid infinite loop due to base method getting called
@@ -116,9 +116,9 @@ namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
                 }
                 else
                 {
-                    Debug.Log("***CFLOG*** [EmpowerEffect_Initialize] Increasing key " + key + " with amount : " + effectAmount);
-                    ownerInstanceIdToEmpowerAmountDict[key] += effectAmount;
-                    Debug.Log("***CFLOG*** [EmpowerEffect_Initialize] New amount for key " + key + ": " + ownerInstanceIdToEmpowerAmountDict[key]);
+                    Debug.Log("***CFLOG*** [EmpowerEffect_Initialize] Re-Initializing key " + key + " with amount : " + effectAmount);
+                    ownerInstanceIdToEmpowerAmountDict[key] = effectAmount;
+                    Debug.Log("***CFLOG*** [EmpowerEffect_Initialize] Amount for key " + key + ": " + ownerInstanceIdToEmpowerAmountDict[key]);
                 }
 
                 // Avoid infinite loop due to base method getting called

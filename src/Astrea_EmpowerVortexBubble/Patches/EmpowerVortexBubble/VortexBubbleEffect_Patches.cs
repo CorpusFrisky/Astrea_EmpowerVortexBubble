@@ -25,21 +25,10 @@ namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
                         empowerAmount = dict[key];
                         Debug.Log("***CFLOG*** Found empower amount in VortexBubbleEffect_ActivateEffect: " + empowerAmount);
                     }
-
-                    //PlayerEffects effects = effectOwner.GetComponent<PlayerEffects>();
-                    //if (effects != null)
-                    //{
-                    //    Il2CppSystem.Object playerEffectsListObj = new PlayerEffectsList();
-                    //    effects.FieldGetter("PlayerEffectsList", "playerEffectsList", ref playerEffectsListObj);
-                    //    if (playerEffectsListObj != null)
-                    //    {
-                    //        PlayerEffectsList effectsList = playerEffectsListObj.Cast<PlayerEffectsList>();
-                    //        //empowerAmount = diceHolder != null ?
-                    //        //    diceHolder.GetEmpowerAmount(ScriptableObject.CreateInstance<InteractionTypeEnum>()) :
-                    //        //    0;
-                    //        Debug.Log("***CFLOG*** Setting empower amount in VortexBubbleEffect_ActivateEffect: " + empowerAmount);
-                    //    }
-                    //}
+                    else 
+                    {
+                        Debug.Log("***CFLOG*** Failed to find empower amount in VortexBubbleEffect_ActivateEffect");
+                    }
                 }
 
                 effectAmount = effectAmount + empowerAmount;
