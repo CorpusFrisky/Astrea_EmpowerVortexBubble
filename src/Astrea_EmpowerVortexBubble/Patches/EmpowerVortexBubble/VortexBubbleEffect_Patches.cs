@@ -18,8 +18,8 @@ namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
                 int empowerAmount = 0;
                 if (effectOwner != null)
                 {
-                    Dictionary<string,int> dict = EmpowerEffect_Patches.ownerNameToEmpowerAmountDict;
-                    string key = effectOwner.name;
+                    Dictionary<int,int> dict = EmpowerEffect_Patches.ownerInstanceIdToEmpowerAmountDict;
+                    int key = effectOwner.GetInstanceID();
                     if (dict.ContainsKey(key))
                     {
                         empowerAmount = dict[key];
