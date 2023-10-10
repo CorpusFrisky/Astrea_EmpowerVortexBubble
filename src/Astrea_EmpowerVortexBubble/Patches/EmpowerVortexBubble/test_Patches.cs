@@ -16,9 +16,9 @@ namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
         {
             public static void Prefix(PurifyAction __instance, ref int purifyAmount, bool chanting, bool effectBasedAreaPurify, GameObject source)
             {
-                ScriptableObject.CreateInstance<VortexBubbleEffect>().ActivateEffect(2, source);
+                //ScriptableObject.CreateInstance<VortexBubbleEffect>().ActivateEffect(2, source);
 
-                purifyAmount = 7;
+                //purifyAmount = 7;
             }
         }
     }
