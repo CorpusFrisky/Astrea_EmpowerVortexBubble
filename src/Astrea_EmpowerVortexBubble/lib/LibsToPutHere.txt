@@ -1,0 +1,6 @@
+After running the game with BepInEx installed, copy the following files from the game's folder to this folder.
+You should be able to find them under <GameFolder>/BepInEx/interop.
+
+- Assembly-CSharp.dll
+- Il2Cppmscorlib.dll
+- UnityEngine.CoreModule.dll
