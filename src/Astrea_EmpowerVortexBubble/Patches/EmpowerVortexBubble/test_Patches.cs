@@ -14,11 +14,14 @@ namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
         [HarmonyPatch(typeof(PurifyAction), nameof(PurifyAction.GetModifiedPurifyAmount))]
         public class PurifyAction_GetModifiedPurifyAmount
         {
+            private static readonly bool testMode = false;
             public static void Prefix(PurifyAction __instance, ref int purifyAmount, bool chanting, bool effectBasedAreaPurify, GameObject source)
             {
-                //ScriptableObject.CreateInstance<VortexBubbleEffect>().ActivateEffect(2, source);
-
-                //purifyAmount = 7;
+                if(testMode)
+                {
+                    ScriptableObject.CreateInstance<VortexBubbleEffect>().ActivateEffect(2, source);
+                    purifyAmount = 20;
+                }
             }
         }
     }

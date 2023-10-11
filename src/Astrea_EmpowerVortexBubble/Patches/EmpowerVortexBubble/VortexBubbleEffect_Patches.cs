@@ -15,14 +15,18 @@ namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
         {
             public static void Prefix(int effectAmount, GameObject effectOwner)
             {
-                int empowerAmount = 0;
+                var empowerAmount = 0;
+                  
                 if (effectOwner != null)
                 {
-                    Dictionary<int,int> dict = EmpowerEffect_Patches.ownerInstanceIdToEmpowerAmountDict;
-                    int key = effectOwner.GetInstanceID();
+                    Dictionary<int,EmpowerEffect> dict = EmpowerEffect_Patches.ownerInstanceIdToEmpowerEffectDict;
+                    
+                    var key = effectOwner.GetInstanceID();
                     if (dict.ContainsKey(key))
                     {
-                        empowerAmount = dict[key];
+                        EmpowerEffect empowerEffect = dict[key];
+                        var playerEffects = BattleHandler.Instance.PlayerGameObject.GetComponent<PlayerEffects>();
+                        empowerAmount = playerEffects.IsEffectActiveGetAmount(empowerEffect);
                         Debug.Log("***CFLOG*** Found empower amount in VortexBubbleEffect_ActivateEffect: " + empowerAmount);
                     }
                     else 

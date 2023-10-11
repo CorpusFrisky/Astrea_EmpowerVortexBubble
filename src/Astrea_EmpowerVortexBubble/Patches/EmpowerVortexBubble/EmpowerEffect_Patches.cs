@@ -11,65 +11,7 @@ namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
 {
     public class EmpowerEffect_Patches
     {
-        public static Dictionary<int, int> ownerInstanceIdToEmpowerAmountDict = new Dictionary<int, int>();
-
-        [HarmonyReversePatch]
-        [HarmonyPatch(typeof(Effect), nameof(Effect.EffectIncreased))]
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        static string EmpowerEffect_EffectIncreased_BaseMethodDummy(EmpowerEffect instance) { return null; }
-
-        [HarmonyPatch(typeof(EmpowerEffect), nameof(EmpowerEffect.EffectIncreased))]
-        public class EmpowerEffect_EffectIncreased
-        {
-            public static bool Prefix(EmpowerEffect __instance, int effectAmount, GameObject effectOwner)
-            {
-                int key = effectOwner.GetInstanceID();
-                if(!ownerInstanceIdToEmpowerAmountDict.ContainsKey(key))
-                { 
-                    Debug.Log("***CFLOG*** [EmpowerEffect_EffectIncreased] Adding key " + key + " with amount : " + effectAmount);
-                    ownerInstanceIdToEmpowerAmountDict.Add(key, effectAmount);
-                }
-                else
-                {
-                    Debug.Log("***CFLOG*** [EmpowerEffect_EffectIncreased] Increasing key " + key + " with amount : " + effectAmount);
-                    ownerInstanceIdToEmpowerAmountDict[key] += effectAmount;
-                    Debug.Log("***CFLOG*** [EmpowerEffect_EffectIncreased] New amount for key " + key + ": " + ownerInstanceIdToEmpowerAmountDict[key]);
-                }
-
-                // Avoid infinite loop due to base method getting called
-                EmpowerEffect_EffectIncreased_BaseMethodDummy(__instance);
-                return false;
-            }
-        }
-
-        [HarmonyReversePatch]
-        [HarmonyPatch(typeof(Effect), nameof(Effect.EffectDecreased))]
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        static string EmpowerEffect_EffectDecreased_BaseMethodDummy(EmpowerEffect instance) { return null; }
-
-        [HarmonyPatch(typeof(EmpowerEffect), nameof(EmpowerEffect.EffectDecreased))]
-        public class EmpowerEffect_EffectDecreased
-        {
-            public static bool Prefix(EmpowerEffect __instance, int effectAmount, GameObject effectOwner)
-            {
-                int key = effectOwner.GetInstanceID();
-                if (!ownerInstanceIdToEmpowerAmountDict.ContainsKey(key))
-                {
-                    Debug.Log("***CFLOG*** [EmpowerEffect_EffectDecreased] Adding key " + key + " with amount : " + effectAmount);
-                    ownerInstanceIdToEmpowerAmountDict.Add(key, effectAmount);
-                }
-                else
-                {
-                    Debug.Log("***CFLOG*** [EmpowerEffect_EffectDecreased] Decreasing key " + key + " with amount : " + effectAmount);
-                    ownerInstanceIdToEmpowerAmountDict[key] -= effectAmount;
-                    Debug.Log("***CFLOG*** [EmpowerEffect_EffectDecreased] New amount for key " + key + ": " + ownerInstanceIdToEmpowerAmountDict[key]);
-                }
-
-                // Avoid infinite loop due to base method getting called
-                EmpowerEffect_EffectDecreased_BaseMethodDummy(__instance);
-                return false;
-            }
-        }
+        public static Dictionary<int, EmpowerEffect> ownerInstanceIdToEmpowerEffectDict = new Dictionary<int, EmpowerEffect>();
 
         [HarmonyReversePatch]
         [HarmonyPatch(typeof(Effect), nameof(Effect.RemoveEffect))]
@@ -82,10 +24,10 @@ namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
             public static bool Prefix(EmpowerEffect __instance, int effectAmount, GameObject effectOwner)
             {
                 int key = effectOwner.GetInstanceID();
-                if (ownerInstanceIdToEmpowerAmountDict.ContainsKey(key))
+                if (ownerInstanceIdToEmpowerEffectDict.ContainsKey(key))
                 {
                     Debug.Log("***CFLOG*** [EmpowerEffect_RemoveEffect] Removing effect from: " + key);
-                    ownerInstanceIdToEmpowerAmountDict.Remove(key);
+                    ownerInstanceIdToEmpowerEffectDict.Remove(key);
                 }
                 else
                 {
@@ -108,17 +50,12 @@ namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
         {
             public static bool Prefix(EmpowerEffect __instance, int effectAmount, GameObject effectOwner)
             {
+                
                 int key = effectOwner.GetInstanceID();
-                if (!ownerInstanceIdToEmpowerAmountDict.ContainsKey(key))
+                if (!ownerInstanceIdToEmpowerEffectDict.ContainsKey(key))
                 {
                     Debug.Log("***CFLOG*** [EmpowerEffect_Initialize] Adding key " + key + " with amount : " + effectAmount);
-                    ownerInstanceIdToEmpowerAmountDict.Add(key, effectAmount);
-                }
-                else
-                {
-                    Debug.Log("***CFLOG*** [EmpowerEffect_Initialize] Re-Initializing key " + key + " with amount : " + effectAmount);
-                    ownerInstanceIdToEmpowerAmountDict[key] = effectAmount;
-                    Debug.Log("***CFLOG*** [EmpowerEffect_Initialize] Amount for key " + key + ": " + ownerInstanceIdToEmpowerAmountDict[key]);
+                    ownerInstanceIdToEmpowerEffectDict.Add(key, __instance);
                 }
 
                 // Avoid infinite loop due to base method getting called
@@ -138,10 +75,10 @@ namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
             public static bool Prefix(EmpowerEffect __instance, int effectAmount, GameObject effectOwner)
             {
                 int key = effectOwner.GetInstanceID();
-                if (ownerInstanceIdToEmpowerAmountDict.ContainsKey(key))
+                if (ownerInstanceIdToEmpowerEffectDict.ContainsKey(key))
                 {
                     Debug.Log("***CFLOG*** [EmpowerEffect_OnRemoveEffectEndOfBattle] Removing effect from: " + key);
-                    ownerInstanceIdToEmpowerAmountDict.Remove(key);
+                    ownerInstanceIdToEmpowerEffectDict.Remove(key);
                 }
                 else
                 {
