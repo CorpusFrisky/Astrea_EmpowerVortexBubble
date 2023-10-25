@@ -6,8 +6,13 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Reflection;
+using UnityEngine.Localization.Tables;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Metadata;
+using UnityEngine.Localization.Settings;
+using UnityEngine.Localization.SmartFormat.Utilities;
 
-namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
+namespace Astrea_EmpowerVortexBubble.Patches.CompendiumPlayground
 {
     public class test_Patches
     {
@@ -19,13 +24,15 @@ namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
             {
                 if(testMode)
                 {
-                    //var allDiceBag = BattleHandler.Instance.allDiceBag;
-                    //allDiceBag.GetAllDices().ForEach((Action<Dice>)(dice =>
-                    //{
-                    //    Debug.Log("CFLOG***** " + dice.GetNameID());
-                    //}));
+                    foreach (Dice die in AnalyticsManager.Instance.saveSystem.allPlayerDicesList.dice)
+                    {
+                        Debug.Log(die.DiceName);
+                    }
 
-                    ScriptableObject.CreateInstance<VortexBubbleEffect>().ActivateEffect(2, source);
+                    //LocalizedStringTable st = LocalizationManager.Instance.battleTable;
+                    //.Database.GetAllTables().Result;
+                    //Debug.Log("ST collection name: " + result.First<StringTable>().TableCollectionName);
+
                     purifyAmount = 20;
                 }
             }
