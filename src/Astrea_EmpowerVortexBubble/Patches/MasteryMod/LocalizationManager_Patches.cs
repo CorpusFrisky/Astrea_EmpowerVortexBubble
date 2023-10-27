@@ -1,6 +1,8 @@
-﻿using Clearings;
+﻿using Astrea_EmpowerVortexBubble.Patches.CompendiumPlayground;
+using Clearings;
 using HarmonyLib;
 using Il2CppSystem.Collections.Generic;
+using System;
 using System.Collections.ObjectModel;
 
 namespace Astrea_EmpowerVortexBubble.Patches.MasteryMod
@@ -8,7 +10,7 @@ namespace Astrea_EmpowerVortexBubble.Patches.MasteryMod
     public class LocalizationManager_Patches
     {
         static bool isDiceIdListLoaded = false;
-        static Collection<int> diceIdHashList;
+        static Collection<string> diceIdHashList;
 
 
         [HarmonyPatch(typeof(LocalizationManager), nameof(LocalizationManager.GetLocalizedString))]
@@ -23,7 +25,10 @@ namespace Astrea_EmpowerVortexBubble.Patches.MasteryMod
 
                 UnityEngine.Debug.Log("*******CFLOG LocalizationManager_GetLocalizedString Prefix " + ID);
 
-                string baseId = ID.Replace(Constants.PLUS_PLUS_DIE_MASTERY_ID_SUFFIX, "")
+                MasteryDieTypeEnum dieType = MasteryModStringUtil.getDieTypeFromDieId(ID);
+
+                string baseId = ID.Replace(Constants.PLUS_PLUS_PLUS_DIE_MASTERY_ID_SUFFIX, "")
+                    .Replace(Constants.PLUS_PLUS_DIE_MASTERY_ID_SUFFIX, "")
                     .Replace(Constants.PLUS_DIE_MASTERY_ID_SUFFIX, "")
                     .Replace(Constants.DIE_MASTERY_ID_SUFFIX, "");
 
@@ -41,13 +46,23 @@ namespace Astrea_EmpowerVortexBubble.Patches.MasteryMod
 
                     UnityEngine.Debug.Log("*******CFLOG getOriginalDieStringFromMarkedName2 " + ID + ": " + baseId);
 
-                    __state = new MasteryStringState(baseId, true);
+                    __state = new MasteryStringState()
+                    {
+                        baseId = baseId,
+                        dieType = dieType,
+                        shouldPerformMasteryCheck = true
+                    };
                     ID = baseId;
                 }
                 else
                 {
                     UnityEngine.Debug.Log("*******CFLOG getOriginalDieStringFromMarkedName3 " + ID);
-                    __state = new MasteryStringState(ID, false);
+                    __state = new MasteryStringState()
+                    {
+                        baseId = ID,
+                        dieType = dieType,
+                        shouldPerformMasteryCheck = false
+                    };
                 }
             }
 
@@ -57,7 +72,12 @@ namespace Astrea_EmpowerVortexBubble.Patches.MasteryMod
 
                 if (__state.shouldPerformMasteryCheck)
                 {
-                    return (diceIdHashList.Contains(__state.baseId.GetHashCode())) ? __result + " (Unmastered)" : __result;
+                    UnityEngine.Debug.Log("*******CFLOG checking master on " + __state.baseId);
+
+                    return (diceIdHashList.Contains(__state.baseId) && 
+                            !Compendium_Patches.isCardMastered(__state.baseId, __state.dieType))
+                        ? __result + " (Unmastered)" 
+                        : __result;
                 }
 
                 return __result;
@@ -69,12 +89,12 @@ namespace Astrea_EmpowerVortexBubble.Patches.MasteryMod
             if (diceList == null || diceList.Count == 0) { return; }
 
             isDiceIdListLoaded = true;
-            diceIdHashList = new Collection<int>();
+            diceIdHashList = new Collection<string>();
             foreach (Dice die in diceList)
             {
-                UnityEngine.Debug.Log("*******CFLOG Adding to die id hash list " + die.GetNameID());
+                UnityEngine.Debug.Log("*******CFLOG Adding to die id list " + die.GetNameID());
 
-                diceIdHashList.Add(die.GetNameID().GetHashCode());
+                diceIdHashList.Add(die.GetNameID());
             }
         }
     }

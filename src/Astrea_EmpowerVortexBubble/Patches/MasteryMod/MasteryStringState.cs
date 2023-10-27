@@ -3,12 +3,7 @@
     public class MasteryStringState
     {
         public string baseId;
+        public MasteryDieTypeEnum dieType;
         public bool shouldPerformMasteryCheck;
-
-        public MasteryStringState(string baseId, bool shouldPerformMasteryCheck)
-        {
-            this.baseId = baseId;
-            this.shouldPerformMasteryCheck = shouldPerformMasteryCheck;
-        }
     }
 }
