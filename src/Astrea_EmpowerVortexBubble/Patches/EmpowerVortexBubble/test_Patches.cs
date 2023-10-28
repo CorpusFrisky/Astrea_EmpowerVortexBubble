@@ -14,7 +14,7 @@ namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
         [HarmonyPatch(typeof(PurifyAction), nameof(PurifyAction.GetModifiedPurifyAmount))]
         public class PurifyAction_GetModifiedPurifyAmount
         {
-            private static readonly bool testMode = true;
+            private static readonly bool testMode = false;
             public static void Prefix(PurifyAction __instance, ref int purifyAmount, bool chanting, bool effectBasedAreaPurify, GameObject source)
             {
                 if(testMode)
@@ -23,10 +23,10 @@ namespace Astrea_EmpowerVortexBubble.Patches.EmpowerVortexBubble
                     //allDiceBag.GetAllDices().ForEach((Action<Dice>)(dice =>
                     //{
                     //    Debug.Log("CFLOG***** " + dice.GetNameID());
-                    //}));
+                    //}
 
-                    ScriptableObject.CreateInstance<VortexBubbleEffect>().ActivateEffect(2, source);
-                    purifyAmount = 20;
+                    //ScriptableObject.CreateInstance<VortexBubbleEffect>().ActivateEffect(2, source);
+                    //purifyAmount = 200;
                 }
             }
         }

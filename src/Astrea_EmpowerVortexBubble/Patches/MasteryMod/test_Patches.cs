@@ -12,17 +12,17 @@ using UnityEngine.Localization.Metadata;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.SmartFormat.Utilities;
 
-namespace Astrea_EmpowerVortexBubble.Patches.CompendiumPlayground
+namespace Astrea_EmpowerVortexBubble.Patches.MasteryMod
 {
     public class test_Patches
     {
         [HarmonyPatch(typeof(PurifyAction), nameof(PurifyAction.GetModifiedPurifyAmount))]
         public class PurifyAction_GetModifiedPurifyAmount
         {
-            private static readonly bool testMode = true;
+            private static readonly bool testMode = false;
             public static void Prefix(PurifyAction __instance, ref int purifyAmount, bool chanting, bool effectBasedAreaPurify, GameObject source)
             {
-                if(testMode)
+                if (testMode)
                 {
                     foreach (Dice die in AnalyticsManager.Instance.saveSystem.allPlayerDicesList.dice)
                     {
@@ -33,7 +33,7 @@ namespace Astrea_EmpowerVortexBubble.Patches.CompendiumPlayground
                     //.Database.GetAllTables().Result;
                     //Debug.Log("ST collection name: " + result.First<StringTable>().TableCollectionName);
 
-                    purifyAmount = 20;
+                    purifyAmount = 1000;
                 }
             }
         }

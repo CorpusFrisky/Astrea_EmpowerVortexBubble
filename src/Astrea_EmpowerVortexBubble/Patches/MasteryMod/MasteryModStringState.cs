@@ -1,6 +1,6 @@
 ﻿namespace Astrea_EmpowerVortexBubble.Patches.MasteryMod
 {
-    public class MasteryStringState
+    public class MasteryModStringState
     {
         public string baseId;
         public MasteryDieTypeEnum dieType;

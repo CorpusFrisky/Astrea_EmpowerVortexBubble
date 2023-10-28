@@ -1,19 +1,46 @@
 ﻿using Clearings;
+using System;
 
 namespace Astrea_EmpowerVortexBubble.Patches.MasteryMod
 {
     internal class MasteryModStringUtil
     {
+        public static string getMasterySaveFilePath()
+        {
+            string LocalLowPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("Roaming", "LocalLow");
+            string masterSaveFilePath = LocalLowPath + Constants.MASTERY_SAVE_FILE_PATH;
+            return masterSaveFilePath;
+        }
+
         public static void markDieNameForMasteryMod(Dice die)
         {
             die.enableCustomDiceNameID = true;
             die.customDiceNameID = die.name + Constants.MASTERY_ID_SUFFIX;
         }
 
-        public static string getOriginalDieStringFromMarkedName(string markedName, string extraSuffix, int extraLength)
+        internal static string getDieBaseIdFromId(string id)
         {
-            return markedName.Substring(0, markedName.Length - (Constants.MASTERY_ID_SUFFIX.Length + extraLength)) + extraSuffix;
+            string baseId = id.Replace(Constants.PLUS_PLUS_PLUS_DIE_MASTERY_ID_SUFFIX, "")
+                    .Replace(Constants.PLUS_PLUS_DIE_MASTERY_ID_SUFFIX, "")
+                    .Replace(Constants.PLUS_DIE_MASTERY_ID_SUFFIX, "")
+                    .Replace(Constants.DIE_MASTERY_ID_SUFFIX, "");
+
+            //UnityEngine.Debug.Log("*******CFLOG getOriginalDieStringFromMarkedName1 " + ID + ": " + baseId);
+
+            if (baseId.Length != id.Length)
+            {
+                // If we are dealing with the manipulation of dice names, we need to be sure to remove any 
+                baseId = baseId.Replace(Constants.MOONIE_SUFFIX, "")
+                .Replace(Constants.CELLARIUS_SUFFIX, "")
+                .Replace(Constants.HEVELIUS_SUFFIX, "")
+                .Replace(Constants.SOTHIS_SUFFIX, "")
+                .Replace(Constants.AUSTRA_SUFFIX, "")
+                .Replace(Constants.ORION_SUFFIX, "");
+            }
+
+            return baseId;
         }
+
         public static MasteryDieTypeEnum getDieTypeFromDieId(string id)
         {
             var ret = MasteryDieTypeEnum.NORMAL;
